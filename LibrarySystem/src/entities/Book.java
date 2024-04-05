@@ -1,5 +1,7 @@
 package entities;
 
+import java.util.InputMismatchException;
+
 
 
 public class Book {
@@ -12,11 +14,17 @@ public class Book {
 		
 	}
 	
-	public Book (String title, String author, int publicationYear) throws NumberFormatException
+	public Book (String title, String author, int publicationYear) 
 	{
-		this.title = title;
-		this.author = author;
-		this.publicationYear = publicationYear;
+		try
+		{	
+			this.title = title;
+			this.author = author;
+			this.publicationYear = publicationYear;
+		} catch (InputMismatchException e)
+		{
+			System.out.println("Insira o ano corretamente");
+		}
 	}
 
 	public String getTitle() {
