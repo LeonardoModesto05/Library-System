@@ -1,5 +1,8 @@
 package entities;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
@@ -14,7 +17,6 @@ public class BookManager {
 		
 		
 		int sel;
-		BookManager manager = new BookManager();
 		try {
 			do {
 	            System.out.println("MENU: ");
@@ -27,13 +29,13 @@ public class BookManager {
 	
 	            switch (sel) {
 	                case 1:
-	                    cadastrarLivro(scanner, manager);
+	                    cadastrarLivro(scanner);
 	                    break;
 	                case 2:
-	                    procurarPorTitulo(scanner, manager);
+	                    procurarPorTitulo(scanner);
 	                    break;
 	                case 3:
-	                    procurarPorAutor(scanner, manager);
+	                    procurarPorAutor(scanner);
 	                    break;
 	                case 4:
 	                    System.out.println("Encerrando...");
@@ -48,7 +50,7 @@ public class BookManager {
 		}
 	}
 	
-	public void cadastrarLivro(Scanner scanner, BookManager manager) 
+	public void cadastrarLivro(Scanner scanner) 
 	{
 		char opcao = 's';
 		
@@ -62,7 +64,7 @@ public class BookManager {
             int yearPublication = scanner.nextInt();
             scanner.nextLine();
             Book book = new Book(titulo, autor, yearPublication);
-            manager.addBook(book);
+            books.add(book);
 
             System.out.println("Deseja cadastrar mais livros?(s/n) ");
             opcao = scanner.next().charAt(0);
@@ -70,11 +72,30 @@ public class BookManager {
         }
 	}
 	
-	public void procurarPorTitulo(Scanner scanner, BookManager manager)
+	public void arquivarLivros()
+	{
+		String path = "c://temp//books.txt";
+		
+		try (BufferedWriter bw = new BufferedWriter(new FileWriter(path,true)))
+		{
+			for (Book book : books)
+			{
+				bw.write(toString());
+				bw.newLine();
+			}
+			bw.flush();
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	public void procurarPorTitulo(Scanner scanner)
 	{
 		System.out.println("Digite o nome do título: ");
 		String title = scanner.nextLine();
-		List <Book> titulo = manager.searchByTitle(title);
+		List <Book> titulo = searchByTitle(title);
 		System.out.println("Livros encotrados pelo nome: " + title);
 		for (Book book : titulo)
 		{
@@ -82,11 +103,11 @@ public class BookManager {
 		}
 	}
 	
-	public void procurarPorAutor(Scanner scanner, BookManager manager)
+	public void procurarPorAutor(Scanner scanner)
 	{
 		System.out.println("Digite o nome do autor: ");
 		String author = scanner.nextLine();
-		List<Book> autor = manager.searchByAuthor(author);
+		List<Book> autor = searchByAuthor(author);
 		System.out.println("Livros encotrados do autor: " + author);
 		for (Book a : autor)
 		{
@@ -131,5 +152,12 @@ public class BookManager {
 			}
 		}
 		return matchingAuthors;
+	}
+	public String toString() {
+	    StringBuilder result = new StringBuilder();
+	    for (Book book : books) {
+	        result.append("Title: ").append(book.getTitle()).append(" Author: ").append(book.getAuthor()).append(" Year of publication: ").append(book.getPublicationYear()).append("\n");
+	    }
+	    return result.toString();
 	}
 }

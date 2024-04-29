@@ -1,11 +1,8 @@
 package application;
 
-import java.util.List;
 import java.util.Scanner;
 
-import entities.Book;
 import entities.BookManager;
-import exception.DomainException;
 
 public class Program {
 
@@ -16,7 +13,7 @@ public class Program {
 		
 		manager.Menu(sc);
 		
-		
+		manager.arquivarLivros();
 		
 		
 		sc.close();
